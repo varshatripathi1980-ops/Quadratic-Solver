@@ -1,83 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Solution</title>
+<title>Quadratic Solver - Solution</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
     font-family:Inter,sans-serif;
+}
+
+body{
     background:#0f0f0f;
-    color:white;
     padding:30px;
 }
 
 .container{
-    max-width:900px;
+    max-width:1000px;
     margin:auto;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-bottom:20px;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
 }
 
 .card{
     background:white;
-    color:black;
     padding:25px;
     border-radius:16px;
     margin-bottom:20px;
 }
 
 h2{
-    margin-bottom:15px;
     color:#ff5722;
+    margin-bottom:15px;
+}
+
+p{
+    line-height:1.8;
 }
 
 pre{
     white-space:pre-wrap;
-    line-height:1.7;
+    line-height:1.8;
+    overflow-x:auto;
 }
 
-.back{
-    display:inline-block;
-    margin-bottom:20px;
-    color:white;
+#quadraticChart{
+    margin-top:20px;
 }
+
+.result{
+    font-size:18px;
+    font-weight:600;
+}
+
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<a class="back" href="index.html">
-← Back
+<a href="index.html" class="back-btn">
+← Back to Solver
 </a>
 
 <div class="card">
-<h2>Equation</h2>
-<p id="equation"></p>
+    <h2>Equation</h2>
+    <p id="equation"></p>
 </div>
 
 <div class="card">
-<h2>Roots</h2>
-<div id="roots"></div>
+    <h2>Roots</h2>
+    <div class="result" id="roots"></div>
 </div>
 
 <div class="card">
-<h2>Quadratic Formula Working</h2>
-<pre id="working"></pre>
+    <h2>Quadratic Formula Working</h2>
+    <pre id="working"></pre>
 </div>
 
 <div class="card">
-<h2>Factorisation</h2>
-<div id="factorisation"></div>
+    <h2>Factorisation Method</h2>
+    <pre id="factorisation"></pre>
 </div>
 
 <div class="card">
     <h2>Graph</h2>
-
     <canvas id="quadraticChart"></canvas>
 </div>
 
@@ -85,87 +107,251 @@ pre{
 
 <script>
 
-const params=new URLSearchParams(window.location.search);
+/* ===========================
+   Read URL Parameters
+=========================== */
 
-const a=parseFloat(params.get("a"));
-const b=parseFloat(params.get("b"));
-const c=parseFloat(params.get("c"));
+const params = new URLSearchParams(window.location.search);
 
-document.getElementById("equation").innerHTML=
+const a = parseFloat(params.get("a"));
+const b = parseFloat(params.get("b"));
+const c = parseFloat(params.get("c"));
+
+/* ===========================
+   Equation Display
+=========================== */
+
+document.getElementById("equation").innerHTML =
 `${a}x² + ${b}x + ${c} = 0`;
 
-const d=b*b-4*a*c;
+/* ===========================
+   Solve Equation
+=========================== */
 
-let rootsHTML="";
+const d = b*b - 4*a*c;
 
-if(d>0){
+let x1, x2;
 
-const x1=(-b+Math.sqrt(d))/(2*a);
-const x2=(-b-Math.sqrt(d))/(2*a);
+let rootHTML = "";
 
-rootsHTML=`
-<p>x₁ = ${x1.toFixed(4)}</p>
-<p>x₂ = ${x2.toFixed(4)}</p>
-`;
+if(d > 0){
+
+    x1 = (-b + Math.sqrt(d))/(2*a);
+    x2 = (-b - Math.sqrt(d))/(2*a);
+
+    rootHTML = `
+    x₁ = ${x1.toFixed(4)}<br>
+    x₂ = ${x2.toFixed(4)}
+    `;
 
 }
-else if(d===0){
+else if(d === 0){
 
-const x=-b/(2*a);
+    x1 = -b/(2*a);
 
-rootsHTML=`
-<p>x = ${x.toFixed(4)}</p>
-`;
+    rootHTML = `
+    x = ${x1.toFixed(4)}
+    `;
 
 }
 else{
 
-const real=(-b/(2*a)).toFixed(4);
-const imag=(Math.sqrt(-d)/(2*a)).toFixed(4);
+    const real = (-b/(2*a)).toFixed(4);
+    const imag = (Math.sqrt(-d)/(2*a)).toFixed(4);
 
-rootsHTML=`
-<p>x₁ = ${real}+${imag}i</p>
-<p>x₂ = ${real}-${imag}i</p>
-`;
-
+    rootHTML = `
+    x₁ = ${real} + ${imag}i<br>
+    x₂ = ${real} - ${imag}i
+    `;
 }
 
-document.getElementById("roots").innerHTML=rootsHTML;
+document.getElementById("roots").innerHTML = rootHTML;
 
-document.getElementById("working").textContent=
+/* ===========================
+   Quadratic Formula Working
+=========================== */
+
+document.getElementById("working").textContent =
+
 `Given:
 
 a = ${a}
 b = ${b}
 c = ${c}
 
-D = b² − 4ac
+Discriminant:
 
-D = (${b})² − 4(${a})(${c})
+D = b² - 4ac
+
+D = (${b})² - 4(${a})(${c})
 
 D = ${d}
 
-x = (-b ± √D)/(2a)
+√D = ${d >= 0 ? Math.sqrt(d).toFixed(4) : "Not Real"}
 
-Substituting values:
+Quadratic Formula:
 
-x = (-(${b}) ± √${d})/(2×${a})
+x = (-b ± √D) / (2a)
 
-Final roots shown above.
+x = (-(${b}) ± √${d}) / (2 × ${a})
+
+Final roots:
+
+${rootHTML.replace(/<br>/g,"\n")}`;
+
+/* ===========================
+   Factorisation
+=========================== */
+
+function factorise(a,b,c){
+
+    const ac = a*c;
+
+    for(let m=-Math.abs(ac)*2; m<=Math.abs(ac)*2; m++){
+
+        for(let n=-Math.abs(ac)*2; n<=Math.abs(ac)*2; n++){
+
+            if(m*n === ac && m+n === b){
+
+                return `
+
+Step 1
+
+Find two numbers whose:
+
+Product = a × c = ${ac}
+
+Sum = b = ${b}
+
+Numbers found:
+
+${m} and ${n}
+
+Step 2
+
+Split middle term:
+
+${a}x² + ${m}x + ${n}x + ${c}
+
+Step 3
+
+Group terms:
+
+(${a}x² + ${m}x)
++
+(${n}x + ${c})
+
+Factorisation possible.
+
+(Advanced symbolic factor extraction can be added later.)
 `;
+            }
+        }
+    }
 
-if(Number.isInteger(Math.sqrt(d))){
+    return `
+Cannot be factorised using simple integer factors.
 
-document.getElementById("factorisation").innerHTML=
-"Possible factorisation exists (advanced implementation can be added).";
+Use the quadratic formula instead.
+`;
+}
+
+document.getElementById("factorisation").textContent =
+factorise(a,b,c);
+
+/* ===========================
+   Graph Data
+=========================== */
+
+const points = [];
+
+for(let x=-20; x<=20; x+=0.25){
+
+    points.push({
+        x:x,
+        y:a*x*x + b*x + c
+    });
+}
+
+const datasets = [
+
+{
+    label:`${a}x² + ${b}x + ${c}`,
+    data:points,
+    borderColor:"#ff5722",
+    borderWidth:3,
+    pointRadius:0,
+    tension:0.1
+}
+
+];
+
+/* ===========================
+   Plot Real Roots
+=========================== */
+
+if(d >= 0){
+
+    datasets.push({
+
+        label:"Roots",
+
+        data:[
+            {x:x1,y:0},
+            {x:d===0 ? x1 : x2,y:0}
+        ],
+
+        showLine:false,
+        pointRadius:7
+    });
 
 }
-else{
 
-document.getElementById("factorisation").innerHTML=
-"Simple integer factorisation not available.";
+/* ===========================
+   Create Chart
+=========================== */
 
-}
+new Chart(
+
+document.getElementById("quadraticChart"),
+
+{
+    type:"line",
+
+    data:{
+        datasets:datasets
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+            legend:{
+                display:true
+            }
+        },
+
+        scales:{
+
+            x:{
+                type:"linear",
+                title:{
+                    display:true,
+                    text:"x"
+                }
+            },
+
+            y:{
+                title:{
+                    display:true,
+                    text:"y"
+                }
+            }
+
+        }
+    }
+});
 
 </script>
 
