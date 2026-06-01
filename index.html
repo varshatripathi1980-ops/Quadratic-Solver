@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadratic Solver</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+body{
+    background:#0f0f0f;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:35px;
+    border-radius:20px;
+}
+
+.logo{
+    width:55px;
+    height:55px;
+    background:#ff5722;
+    color:white;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:22px;
+    margin-bottom:20px;
+}
+
+h1{
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#666;
+    margin-bottom:30px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:2px solid #eee;
+    border-radius:12px;
+    font-size:16px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#ff5722;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#ff5722;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button{
+    -webkit-appearance:none;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<div class="logo">x²</div>
+
+<h1>Quadratic Solver</h1>
+
+<p class="subtitle">
+Enter coefficients of ax² + bx + c = 0
+</p>
+
+<div class="input-group">
+<label>a</label>
+<input type="number" id="a">
+</div>
+
+<div class="input-group">
+<label>b</label>
+<input type="number" id="b">
+</div>
+
+<div class="input-group">
+<label>c</label>
+<input type="number" id="c">
+</div>
+
+<button onclick="calculate()">
+Calculate
+</button>
+
+</div>
+
+<script>
+function calculate(){
+
+    let a=document.getElementById("a").value;
+    let b=document.getElementById("b").value;
+    let c=document.getElementById("c").value;
+
+    if(a==="" || b==="" || c===""){
+        alert("Please enter all coefficients.");
+        return;
+    }
+
+    window.location.href =
+    `solution.html?a=${a}&b=${b}&c=${c}`;
+}
+</script>
+
+</body>
+</html>
